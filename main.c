@@ -11,24 +11,9 @@ typedef struct {
 	char nextChar;
 } Match;
 
-Match findLongestMatch(char *searchBuffer, char *lookAhead)
-{
-	int bestMatch = 0;
-	int currentMatch = 0;
-	Match ans;
-	ans.offset = 0;
-	ans.length = 0;
-	ans.nextChar = '\0';
-	for (int i = 0; i < strlen(searchBuffer); i++) {
-		if(searchBuffer[i] == lookAhead[i]){
-			currentMatch++;
-		}
-		if(currentMatch > bestMatch){
-			bestMatch = currentMatch;
-		}
-	}
-
-	return ans;
+void findLongestMatch(char *searchBuffer, char *lookAhead)
+{	
+	
 }
 
 int encodeLZ77(char *inputString) {
@@ -38,19 +23,32 @@ int encodeLZ77(char *inputString) {
 
 	for (int i = 0; i < strlen(inputString); i++){
 		searchBuffer[i] = inputString[i];
-		if (inputString[i+1] != '\0'){
-			lookAhead[i] = inputString[i+1];
-		}
-		lookAhead[i] = inputString[i+1];
+		memcpy(lookAhead, inputString + i + 1, 16);
 		position++;
 		printf("Search buffer = %s, lookahead = %s, position = %d\n", searchBuffer, lookAhead, position);
+		findLongestMatch(searchBuffer, lookAhead);	
 	}
 }
 
 int decodeLZ77() {}
 
-int main() {
+int main(int argc, char *argv[]) {
 	char testString[] = "ABB";
+	int mode = 0;
+	if (argc == 4){	
+		if(strcmp(argv[1], "-c") == 0)
+		{
+			mode = 1;
+		}else if (strcmp(argv[1], "-d") == 0)
+		{
+			mode = 2;
+		}else {
+			printf("error");
+		}
+	}else if(argc < 4){
+		printf("need more arguments\n");
+	}
+	printf("%d\n",mode);
 
 	encodeLZ77(testString);
 
